@@ -1,10 +1,11 @@
 import styles from './index.less';
 import 'antd/dist/antd.less';
-import { List, Card } from 'antd';
+import { Space, Button } from 'antd';
 import React, { FC } from 'react';
 import { FictionSearchListItem } from '@/service';
 
-import Meta from 'antd/lib/card/Meta';
+import Table, { ColumnsType } from 'antd/lib/table';
+import { useHistory } from 'react-router-dom';
 export interface SearchFictionItemListProps {
   data: FictionSearchListItem[];
   loading?: boolean;
@@ -13,30 +14,57 @@ const SearchFictionItemList: FC<SearchFictionItemListProps> = ({
   data,
   loading,
 }) => {
+  const history = useHistory();
+
+  const columns: ColumnsType<FictionSearchListItem> = [
+    {
+      title: '书名',
+      dataIndex: 'title',
+      key: 'title',
+      render: (text, record) => (
+        <Button
+          onClick={() => {
+            history.push(`/fiction?url=${record.link}`);
+          }}
+          type="link"
+        >
+          {text}
+        </Button>
+      ),
+    },
+    {
+      title: '作者',
+      dataIndex: 'author',
+      key: 'author',
+    },
+    {
+      title: '最新章节',
+      dataIndex: 'lastUpdateChapterTitle',
+      key: 'lastUpdateChapterTitle',
+      render: (text, record) => (
+        <a href={record.lastUpdateChapterUrl}>{text}</a>
+      ),
+    },
+    {
+      title: '最新更新',
+      dataIndex: 'lastUpdateDate',
+      key: 'lastUpdateDate',
+    },
+
+    {
+      title: 'Action',
+      key: 'action',
+      render: (text, record) => (
+        <Space size="middle">
+          <a>加入书架</a>
+        </Space>
+      ),
+    },
+  ];
   return (
-    <List
-      grid={{ gutter: 2, column: 8 }}
-      dataSource={data}
-      loading={loading}
-      renderItem={(item) => (
-        <List.Item>
-          <Card
-            hoverable
-            style={{ width: 180 }}
-            cover={
-              <img
-                alt="example"
-                className="object-cover"
-                height="240"
-                src={item.cover}
-              />
-            }
-          >
-            <Meta title={item.title} description={item.author} />
-          </Card>
-        </List.Item>
-      )}
-    />
+    <>
+      <Table loading={loading} columns={columns} dataSource={data} />
+    </>
   );
 };
 
