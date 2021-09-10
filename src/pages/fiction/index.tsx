@@ -1,72 +1,38 @@
-import {
-  FictionCatalog,
-  getFictionCatalogByUrl,
-  getFictionContentByUrl,
-} from '@/service';
-import { useBoolean, useRequest } from 'ahooks';
+import styles from './index.less';
+import 'antd/dist/antd.less';
+import { Input } from 'antd';
 import React, { FC, useState } from 'react';
-import './index.less';
-import { AlignCenterOutlined, SettingOutlined } from '@ant-design/icons';
-import parse from 'html-react-parser';
-import { useLocation } from 'react-router';
-import CatalogDrawer from './components/catalog-drawer';
-import SideMenuItem from './components/side-menu-item';
-import Loading from '@/components/loading';
-export interface FictionProps {}
-const Fiction: FC<FictionProps> = () => {
-  const location = useLocation();
-  const { query } = location;
-  const [state, { setTrue, setFalse }] = useBoolean(false);
+import useRequest from '@ahooksjs/use-request';
+import { FictionSearchListItem, search } from '@/service';
+import SearchFictionItemList from '@/components/search-fiction-item-list';
+const { Search } = Input;
 
-  const [fictionCatalog, setFictionCatalog] = useState<FictionCatalog[]>([]);
-  const [content, setContent] = useState<string>('');
-  const { loading } = useRequest(() => getFictionCatalogByUrl(query.url), {
-    onSuccess: (data) => {
-      setFictionCatalog(data);
-    },
-  });
-  const { run: getContentRequest, loading: contentLoading } = useRequest(
-    getFictionContentByUrl,
+export default function Fiction() {
+  const [fictionSearchListItem, setFictionSearchListItem] = useState<
+    FictionSearchListItem[]
+  >([]);
+  const { loading, run: searchRequest } = useRequest(
+    (name: string) => search(name),
     {
       manual: true,
       onSuccess: (data) => {
-        setContent(data);
+        setFictionSearchListItem(data);
       },
     },
   );
+  const onSearch = (name: string) => {
+    searchRequest(name);
+  };
   return (
-    <div className="flex">
-      <CatalogDrawer
-        visible={state}
-        onClose={setFalse}
-        loading={loading}
-        onClickCatalog={(url) => {
-          setTrue();
-          getContentRequest(url);
-        }}
-        data={fictionCatalog}
+    <div className="p-4">
+      <Search
+        placeholder="input search text"
+        onSearch={onSearch}
+        className="mb-4"
+        style={{ width: 200 }}
       />
-      <div className="flex-1 p-4 flex justify-center">
-        <div className="relative">
-          <div className="fixed top-0">
-            <SideMenuItem text="设置" icon={<SettingOutlined />} />
-            <SideMenuItem
-              onClick={setTrue}
-              text="目录"
-              icon={<AlignCenterOutlined />}
-            />
-          </div>
-          {contentLoading ? (
-            <div className="flex justify-center item-center">
-              <Loading />
-            </div>
-          ) : (
-            <div className="ml-12">{parse(content)}</div>
-          )}
-        </div>
-      </div>
+
+      <SearchFictionItemList data={fictionSearchListItem} loading={loading} />
     </div>
   );
-};
-
-export default Fiction;
+}

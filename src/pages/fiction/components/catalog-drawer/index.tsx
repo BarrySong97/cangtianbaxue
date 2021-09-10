@@ -21,7 +21,7 @@ const CatalogDrawer: FC<CatalogDrawerProps> = ({
       placement={'right'}
       closable={false}
       width={400}
-      mask={false}
+      // mask={false}
       onClose={onClose}
       visible={visible}
     >
