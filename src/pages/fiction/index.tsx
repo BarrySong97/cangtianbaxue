@@ -3,8 +3,8 @@ import 'antd/dist/antd.less';
 import { Input } from 'antd';
 import React, { FC, useState } from 'react';
 import useRequest from '@ahooksjs/use-request';
-import { FictionSearchListItem, search } from '@/service';
-import SearchFictionItemList from '@/components/search-fiction-item-list';
+import { FictionSearchListItem, search } from '@/service/fiction';
+import SearchFictionItemList from '@/pages/fiction/components/search-fiction-item-list';
 const { Search } = Input;
 
 export default function Fiction() {

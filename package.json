@@ -22,14 +22,21 @@
   "dependencies": {
     "@ant-design/icons": "^4.6.4",
     "@ant-design/pro-layout": "^6.5.0",
+    "@types/webtorrent": "^0.109.1",
     "ahooks": "^2.10.9",
     "antd": "^4.16.13",
+    "dplayer": "^1.26.0",
+    "hls.js": "1.0.9-0.canary.7923",
     "html-react-parser": "^1.3.0",
     "react": "17.x",
     "react-dom": "17.x",
-    "umi": "^3.5.17"
+    "react-loading-skeleton": "^2.2.0",
+    "react-player": "^2.9.0",
+    "umi": "^3.5.17",
+    "webtorrent": "^1.5.5"
   },
   "devDependencies": {
+    "@types/dplayer": "^1.25.2",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
     "@umijs/preset-react": "1.x",

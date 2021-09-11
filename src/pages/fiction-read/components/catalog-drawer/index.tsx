@@ -1,4 +1,4 @@
-import { FictionCatalog } from '@/service';
+import { FictionCatalog } from '@/service/fiction';
 import { Button, Drawer, List } from 'antd';
 import React, { FC } from 'react';
 export interface CatalogDrawerProps {

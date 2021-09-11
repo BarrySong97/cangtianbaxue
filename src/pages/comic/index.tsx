@@ -1,12 +1,12 @@
-import { AnimeSearchListItem, search } from '@/service/anime';
+import { ComicSearchListItem, search } from '@/service/comic';
 import { useRequest } from 'ahooks';
 import Search from 'antd/lib/input/Search';
 import React, { FC, useState } from 'react';
 import SearchList from './components/search-list';
-export interface AnimeProps {}
-const Anime: FC<AnimeProps> = () => {
+export interface CommicProps {}
+const Comic: FC<CommicProps> = () => {
   const [animeSearchListItem, setAnimeSearchListItem] = useState<
-    AnimeSearchListItem[]
+    ComicSearchListItem[]
   >([]);
   const { loading, run: searchRequest } = useRequest(
     (name: string) => search(name),
@@ -33,4 +33,4 @@ const Anime: FC<AnimeProps> = () => {
   );
 };
 
-export default Anime;
+export default Comic;

@@ -1,4 +1,3 @@
-import 'antd/dist/antd.less';
 import React from 'react';
 
 export default function IndexPage() {

@@ -1,17 +1,19 @@
 import {
   FictionCatalog,
+  FictionContent,
   getFictionCatalogByUrl,
   getFictionContentByUrl,
-} from '@/service';
+} from '@/service/fiction';
 import { useBoolean, useRequest } from 'ahooks';
 import React, { FC, useState } from 'react';
 import './index.less';
 import { AlignCenterOutlined, SettingOutlined } from '@ant-design/icons';
 import parse from 'html-react-parser';
 import { useLocation } from 'react-router';
-import CatalogDrawer from '../catalog-drawer';
-import SideMenuItem from '../side-menu-item';
-import Loading from '@/components/loading';
+import CatalogDrawer from './components/catalog-drawer';
+import SideMenuItem from './components/side-menu-item';
+import { Button } from 'antd';
+import Skeleton from 'react-loading-skeleton';
 export interface FictionProps {}
 const FictionChapter: FC<FictionProps> = () => {
   const location = useLocation();
@@ -19,7 +21,7 @@ const FictionChapter: FC<FictionProps> = () => {
   const [state, { setTrue, setFalse }] = useBoolean(false);
 
   const [fictionCatalog, setFictionCatalog] = useState<FictionCatalog[]>([]);
-  const [content, setContent] = useState<string>('');
+  const [fictionContent, setFictionContent] = useState<FictionContent>();
   const { loading, run: getCatalogRequest } = useRequest(
     () => getFictionCatalogByUrl(query.url),
     {
@@ -34,7 +36,7 @@ const FictionChapter: FC<FictionProps> = () => {
     {
       manual: true,
       onSuccess: (data) => {
-        setContent(data);
+        setFictionContent(data);
       },
     },
   );
@@ -64,13 +66,35 @@ const FictionChapter: FC<FictionProps> = () => {
               icon={<AlignCenterOutlined />}
             />
           </div>
-          {contentLoading ? (
-            <div className="flex justify-center item-center">
-              <Loading />
+
+          <div className="ml-16">
+            {contentLoading ? (
+              <Skeleton count={20} />
+            ) : (
+              parse(fictionContent?.content ?? '')
+            )}
+
+            <div className="flex justify-between w-full p-4">
+              <Button
+                onClick={() => {
+                  if (fictionContent?.prevLink) {
+                    getContentRequest(fictionContent?.prevLink);
+                  }
+                }}
+              >
+                上一章
+              </Button>
+              <Button
+                onClick={() => {
+                  if (fictionContent?.nextLink) {
+                    getContentRequest(fictionContent?.nextLink);
+                  }
+                }}
+              >
+                下一章
+              </Button>
             </div>
-          ) : (
-            <div className="ml-16">{parse(content)}</div>
-          )}
+          </div>
         </div>
       </div>
     </div>

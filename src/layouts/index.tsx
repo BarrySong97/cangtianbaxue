@@ -1,8 +1,7 @@
 import { Content, Footer, Header } from 'antd/lib/layout/layout';
-import { Layout, Menu, Breadcrumb } from 'antd';
+import { Layout, Menu } from 'antd';
 import React, { FC } from 'react';
-import SubMenu from 'antd/lib/menu/SubMenu';
-import { MailOutlined } from '@ant-design/icons';
+import 'antd/dist/antd.less';
 export interface LayoutProps {}
 const LayoutIndex: FC<LayoutProps> = ({ children }) => {
   return (
